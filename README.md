@@ -44,9 +44,14 @@ For official Github repository:
 ```
 [url "https://github.com/helsinova/"]
     insteadOf = ssh://dot_siterepo/
-
 ```
 
+Or if you're an official member of the team:
+
+```
+[url "ssh://git@github.com/helsinova/"]
+    insteadOf = ssh://dot_siterepo/
+```
 
 Typical Gerrit hosting:
 
@@ -57,6 +62,5 @@ Typical Gerrit hosting:
 [url "ssh://account@review_server:29418/pathname/"]
     pushInsteadOf = ssh://dot_siterepo/
     pushInsteadOf = ssh://account@server:29418/pathname/
-
 ```
 
