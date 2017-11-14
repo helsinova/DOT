@@ -6,3 +6,7 @@
 	path = DOT_Cygwin
 	url = ssh://dot_siterepo/DOT_Cygwin
 	branch = master
+[submodule "wiki"]
+	path = wiki
+	url = ssh://dot_siterepo/DOT.wiki
+	branch = master
