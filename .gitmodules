@@ -1,12 +1,4 @@
-[submodule "DOT_Linux"]
-	path = DOT_Linux
-	url = ssh://dot_siterepo/DOT_Linux
-	branch = master
-[submodule "DOT_Cygwin"]
-	path = DOT_Cygwin
-	url = ssh://dot_siterepo/DOT_Cygwin
-	branch = master
 [submodule "wiki"]
-	path = wiki
+	path = wiki/wikidata
 	url = ssh://dot_siterepo/DOT.wiki
 	branch = master
