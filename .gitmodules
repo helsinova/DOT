@@ -1,0 +1,33 @@
+[submodule ".vim/bundle/ctrlp.vim"]
+	path = .vim/bundle/ctrlp.vim
+	url = https://github.com/ctrlpvim/ctrlp.vim.git
+[submodule ".vim/bundle/tagbar"]
+	path = .vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule ".vim/bundle/vim-airline"]
+	path = .vim/bundle/vim-airline
+	url = https://github.com/vim-airline/vim-airline
+[submodule ".vim/bundle/vim-orgmode"]
+	path = .vim/bundle/vim-orgmode
+	url = https://github.com/jceb/vim-orgmode
+[submodule ".vim/bundle/calendar-vim"]
+	path = .vim/bundle/calendar-vim
+	url = https://github.com/mattn/calendar-vim
+[submodule ".vim/bundle/SyntaxRange"]
+	path = .vim/bundle/SyntaxRange
+	url = https://github.com/vim-scripts/SyntaxRange.git
+[submodule ".vim/bundle/NrrwRgn"]
+	path = .vim/bundle/NrrwRgn
+	url = https://github.com/chrisbra/NrrwRgn.git
+[submodule ".vim/bundle/vim-speeddating"]
+	path = .vim/bundle/vim-speeddating
+	url = https://github.com/tpope/vim-speeddating.git
+[submodule ".vim/bundle/vim-repeat"]
+	path = .vim/bundle/vim-repeat
+	url = http://github.com/tpope/vim-repeat
+[submodule ".vim/bundle/utl.vim"]
+	path = .vim/bundle/utl.vim
+	url = https://github.com/vim-scripts/utl.vim.git
+[submodule ".vim/bundle/taglist.vim"]
+	path = .vim/bundle/taglist.vim
+	url = https://github.com/vim-scripts/taglist.vim.git

@@ -1,0 +1,13 @@
+BoldAsFont=-1
+ForegroundColour=0,0,64
+BackgroundColour=255,255,187
+FontHeight=9
+FontSmoothing=full
+Locale=en_US
+Charset=UTF-8
+CtrlShiftShortcuts=yes
+Term=xterm-256color
+CursorColour=179,0,0
+CursorType=block
+Rows=73
+Columns=133

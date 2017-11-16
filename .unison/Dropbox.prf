@@ -1,0 +1,14 @@
+root = /home/XXXX/Dropbox
+root = ssh://your.host.com/home/you/Dropbox
+ignore = Name *.o
+ignore = Name *.tmp
+ignore = Name .dropbox.cache
+
+# The following patterns could probably rather go into some generic/defult
+# prf which is either explicitly or implicitly included in each "real" prf.
+# =========================================================================
+ignore = Name .vim_mru_files
+ignore = Regex .*/\.unison/.*
+ignorenot = Regex .*/\.unison/.*\.prf
+ignorenot = Regex .*/\.unison/.*\.sh
+

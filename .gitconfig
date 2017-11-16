@@ -1,0 +1,48 @@
+[user]
+	name = Your Name
+	email = user@domain
+
+[core]
+	editor = "if [ "X$(grep screen <<< ${TERM})" != "X" ]; \
+    then \
+      ED='vim -T screen'; \
+    else \
+      ED='vim'; \
+    fi; \
+    $ED"
+	pager = less -x4
+	fileMode = false
+	autocrlf = input
+	safecrlf = false
+
+[alias]
+	co = checkout
+	ls = ls-files
+	dt = difftool --dir-diff
+	br = branch
+	ci = commit
+	st = status -uno
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	root = rev-parse --show-toplevel
+	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+	mrg = merge --no-ff
+	cdiff = "!bash -c \"if [ $# -eq 2 ]; then meld <(git log --oneline $1) <(git log --oneline $2); else  meld <(git log --oneline) <(git log --oneline $1); fi\" "
+	ssync = "!bash -c \"git submodule init; git submodule sync; git submodule update\" "
+[push]
+	default = matching
+
+[color]
+	ui = auto
+
+[merge]
+	tool = kdiff3
+[diff]
+	tool = meld
+
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true

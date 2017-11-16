@@ -1,0 +1,6 @@
+.s3.rsync/
+.netrwhist
+.bash_history
+.bash_lastdir
+.vim_mru_files
+*~
