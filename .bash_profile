@@ -31,14 +31,6 @@ export LANG='en_GB.UTF-8'
 export EDITOR=vim
 export FZF_DEFAULT_OPTS="--extended"
 
-#if [ "X$(screen -ls | grep sshfw_nntp)" == "X" ]; then
-#   echo "Starting ssh tunnel..."
-#   screen -d -m -S sshfw_nntp ssh -L localhost:1234:localhost:6680 seldlx0294
-#   sleep 3
-#fi
-
-#alias make src.make.sh
-
 #Convert shell-variable to environment
 export HOSTNAME
 
@@ -87,66 +79,7 @@ _bash_prompt_command() {
 	_bash_exitstatus
 	_bash_history_sync
 }
-
 PROMPT_COMMAND=_bash_prompt_command
-
-# Google 'repo' command helpers
-
-# Get manifests branch for current git
-_repo_mbr() {
-	repo info . | grep "Current revision" | awk '{print $3}'
-}
-alias mbr=_repo_mbr
-
-# Clean & restore current git to manifest
-_repo_gclean() {
-	local CURBR=$(git branch | grep -Ee '^\*' | cut -d" " -f2-)
-	local TEST="${CURBR}"
-	if [ "X${CURBR}" == "X" -o "X${CURBR}" != "X${CURBR/\(detached/}" ]; then
-		echo "Git-Cleaning on a disconnected branch?" 1>&2
-		git branch
-		#echo "${CURBR}"
-		echo "Bailing out..." 1>&2
-		return 1
-	fi
-	git stash && git stash clear
-	git clean -fxd && \
-		git checkout origin/$(mbr) && \
-		git reset --hard && \
-		git clean -fxd
-	git checkout "${CURBR}"
-}
-alias mclean=_repo_gclean
-
-_prline() {
-	echo -n "#########1#########2#########3#########4"
-	echo    "#########5#########6#########7#########8"
-}
-
-# Clean & restore git to manifest
-_repo_forall_gclean() {
-	repo forall -c ' \
-		echo -n "#########1#########2#########3#########4"; \
-		echo    "#########5#########6#########7#########8"; \
-		pwd; \
-		echo -n "#########1#########2#########3#########4"; \
-		echo    "#########5#########6#########7#########8"; \
-		echo "Manifest branch: " $(repo info . | grep "Current revision" | cut -f2 -d":" | sed -e "s/^ //"); \
-		git stash && git stash clear && git clean -fxd && \
-			git checkout origin/$(repo info . | grep "Current revision" | cut -f2 -d":" | sed -e "s/^ //") && \
-			git reset --hard && \
-			git clean -fxd
-	'
-}
-alias rclean=_repo_forall_gclean
-#		git clean -fxd && \
-#			git checkout origin/$(repo info . | grep "Current revision" | '"awk '{print $3}'"') && \
-#			git reset --hard && \
-#			git clean -fxd
-
-
-# ~.~ Build/make wrappers ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~
-# Override the following envars in local terminal if needed
 
 # Detect build colorization.
 ################which grc 1>/dev/null 2>/dev/null && export BCOLOURED="yes"
@@ -158,57 +91,6 @@ export GRCCOLOUR="on"
 
 # Detect number of CPUS on host
 export NCPUS=$(grep processor /proc/cpuinfo | wc -l)
-#export NCPUS=1
-
-function print_mline(){
-	echo -n "#########1#########2#########3#########4"
-	echo    "#########5#########6#########7#########8"
-}
-
-function print_bstart() {
-	print_mline
-	echo "Build starts: $(date)"
-	print_mline
-}
-
-function print_bstop() {
-#	if [ $# -gt 1 ]; then
-		if [ $1 ]; then
-			local RES="OK"
-		else
-			local RES="FAILURE"
-		fi
-#	fi
-
-	local RES=${RES-"UNKNOWN"}
-
-	print_mline
-	echo "Build stops: $(date)"
-	echo "Result: $RES"
-	print_mline
-	return $1
-}
-
-# Logged generic make
-function _lmake_generic() {
-	local TLOGFILE=/tmp/make_$(basename $(pwd))_$(date +%s.%N).log
-	print_bstart | tee $TLOGFILE
-
-	if [ "X${BCOLOURED}" == "X" ]; then
-		time make -j$NCPUS ${@}  |& tee -a $TLOGFILE
-	else
-##		time stdbuf -oL grc -es  --colour=$GRCCOLOUR  make -j$NCPUS ${@} |& tee -a $TLOGFILE
-		time grc -es  --colour=$GRCCOLOUR  make -j$NCPUS ${@} |& tee -a $TLOGFILE
-	fi
-	RC=$?
-	print_bstop $RC |& tee -a $TLOGFILE
-	return $RC
-}
-
-## NOTE: that aliasing make will crap recursive builds. Therefor use another
-## name just to be sure (even if BW clain not to use recusive builds).
-alias bmake=_bw_make
-export -f _bw_make
 
 ## cd to build-direcory for MuppFactory
 function _cd_build() {
@@ -217,51 +99,6 @@ function _cd_build() {
 ## NOTE: that aliasing make will crap recursive builds. Therefor use another
 ## name just to be sure (even if BW clain not to use recusive builds).
 alias cdb=_cd_build
-
-# Logged make front-end
-# Note: "lmake showcommands" to show verbose output for Android builds
-function _lmake() {
-	if [ "X$(basename $(pwd))" == "Xproprietary" ]; then
-		_lmake_polaris_proprietary "${@}"
-	else
-		_lmake_generic "${@}"
-	fi
-}
-alias lmake=_lmake
-
-# List log names on host belonging to "project" (i.e. pwd)
-function _llogs_raw() {
-	ls /tmp/make_* | \
-		grep $(basename $(pwd)) | \
-		sort -r -k1 -t"_" -n | \
-		cut -f3 -d"_" | \
-		cut -f1 -d"."
-}
-
-function _llogs() {
-	##_llogs_raw | xargs -I'{}' date --date='@{}'
-	for TS in $(_llogs_raw); do
-		local DATESTR=$(date --date="@${TS}")
-		local FNAME=$(ls /tmp/make_* | \
-			grep $(basename $(pwd)) | \
-			grep $TS)
-		echo "${DATESTR} # ${FNAME}"
-	done
-}
-alias llogs=_llogs
-
-# Less a log
-function _lless() {
-	local NUMBER=${1-"1"}
-
-	local TS=$(_llogs_raw | head -n${NUMBER} | tail -n1)
-	local FNAME=$(ls /tmp/make_* | \
-		grep $(basename $(pwd)) | \
-		grep $TS)
-
-	less -SR "${FNAME}"
-}
-alias lless=_lless
 
 #Re-init bash (re-read this file)
 function _ibash() {
