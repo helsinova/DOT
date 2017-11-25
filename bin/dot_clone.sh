@@ -28,7 +28,7 @@ git submodule add -b "${THIS_HOST_TYPE}" -- ssh://dot_siterepo/DOT "${CLONE_AS}"
 
 pushd "${CLONE_AS}"
 	echo
-	echo "Branch-off mashine-module from "[${THIS_HOST_TYPE}]" to [${CLONE_AS}]"
+	echo "Branch-off machine-module from "[${THIS_HOST_TYPE}]" to [${CLONE_AS}]"
 	git checkout -B "${CLONE_AS}"
 	echo "Make personal changes in [${CLONE_AS}] and feel free to commit"
 popd
