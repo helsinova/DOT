@@ -27,6 +27,13 @@ bindkey ^[[1;6C next
 ## Re-map Screen hot-key to <C>-z
 escape ^zz
 
+## Enable ability to save/restore terminal buffers (Vim exit e.t.c.)
+## See:
+##  https://superuser.com/questions/196055/how-to-replace-vim-screen-buffer-with-previous-bash-activity-after-quitting
+##  https://stackoverflow.com/questions/17868652/screen-how-to-turn-on-alternate-screen
+
+altscreen on
+
 shelltitle "shell"
 shell -$SHELL
 

@@ -22,12 +22,13 @@
 	br = branch
 	ci = commit
 	st = status -uno
+	files = show --pretty="" --name-only
 	unstage = reset HEAD --
 	last = log -1 HEAD
 	root = rev-parse --show-toplevel
 	lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
 	mrg = merge --no-ff
-	cdiff = "!bash -c \"if [ $# -eq 2 ]; then meld <(git log --oneline $1) <(git log --oneline $2); else  meld <(git log --oneline) <(git log --oneline $1); fi\" "
+	cdiff = "!bash -c \"if [ $# -eq 2 ]; then meld 2>/dev/null <(git log --oneline $1) <(git log --oneline $2); else  meld 2>/dev/null <(git log --oneline) <(git log --oneline $1); fi\" "
 	ssync = "!bash -c \"git submodule init; git submodule sync; git submodule update\" "
 [push]
 	default = matching
