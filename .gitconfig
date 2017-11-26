@@ -1,0 +1,10 @@
+## git configuration specific to this repo
+## Use this as an example and modify freely, changes are typically ignored
+
+## Public repo
+#[url "ssh://git@github.com/helsinova/"]
+#    insteadOf = ssh://dot_siterepo/
+
+## Example of your own 
+[url "ssh://mambrus@kato2:/home/gits/dot/"]
+    insteadOf = ssh://dot_siterepo/
