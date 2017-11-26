@@ -264,7 +264,9 @@ if	[ "X$(uname -a | grep -i CYGWIN)" != "X" ]; then
 
 elif	[ "X$(uname -a | grep -i Linux)" != "X" ]; then
 
-	if [ which lsb_release ] && [ "X$(lsb_release -a | grep -i Ubuntu)" != "X" ]; then
+	if [ "X$(which lsb_release)" != "X" ] && \
+		[ "X$(lsb_release -a 2>/dev/null | grep -i Ubuntu)" != "X" ]
+	then
 
 		#Have this run somewhere and send the windows somewhere in the back
 		#screen -dmS xdg-open__home -- xdg-open ~
