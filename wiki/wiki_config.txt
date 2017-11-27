@@ -52,6 +52,10 @@ static-dir: static
 # css, and images).  If it does not exist, gitit will create it
 # and populate it with required scripts, stylesheets, and images.
 
+default-extension: md
+# files in the repository path must have this extension in order
+# to be recognized as Wiki pages
+
 default-page-type: Markdown
 # specifies the type of markup used to interpret pages in the wiki.
 # Possible values are Markdown, RST, LaTeX, HTML, Markdown+LHS, RST+LHS,
@@ -108,7 +112,7 @@ log-level: WARNING
 # Possible values (from most to least verbose) are DEBUG, INFO,
 # NOTICE, WARNING, ERROR, CRITICAL, ALERT, EMERGENCY.
 
-front-page: Front Page
+front-page: Home
 # specifies which wiki page is to be used as the wiki's front page.
 # Gitit creates a default front page on startup, if one does not exist
 # already.
