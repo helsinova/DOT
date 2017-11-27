@@ -25,7 +25,7 @@ fi
 export XTELNET_GEOMETRY="-geometry 132x88--6+21"
 export XTELNET_GEOMETRY=-"geometry 104x15--9+-8"
 
-# Sshell & Util settings
+# Shell & Util settings
 export LANG='en_GB.UTF-8'
 #set editing-mode vi
 export EDITOR=vim
@@ -41,7 +41,6 @@ function _bash_exitstatus {
     GREEN="\[\e[32;1m\]"
     BLUE="\[\e[34;1m\]"
     OFF="\[\033[m\]"
-
     PROMPT="[\u@\h ${BLUE}\W${OFF}"
 
     if [ "${EXITSTATUS}" -eq 0 ]
@@ -50,7 +49,6 @@ function _bash_exitstatus {
     else
        PS1="${PROMPT} ${BOLD}${RED}:(${OFF} ]\$ "
     fi
-
     PS2="${BOLD}>${OFF} "
 }
 
@@ -75,10 +73,25 @@ _bash_history_sync() {
   builtin history -r         #4
 }
 
+# Bash-prompt commands are run each time prompt is printed
 _bash_prompt_command() {
 	_bash_exitstatus
 	_bash_history_sync
 }
+
+# Alternative of the above (EXPERIMENTAL)
+# Depends on "Directory profiles handling" (see further down in this file)
+# NOTE: Don't use as it's not properly working (exit-code is lost). Also
+#       seems to wind-up bash sometimes (race?)
+_bash_prompt_command_alternative() {
+	_bash_exitstatus
+	_bash_history_sync
+	echo ${0} ${1} ${2}
+	echo ${BASH_ARGC[0]}
+	chpwd_profiles
+}
+
+#Select which "bash-prompt command" to use
 PROMPT_COMMAND=_bash_prompt_command
 
 # Detect build colorization.
@@ -92,13 +105,19 @@ export GRCCOLOUR="on"
 # Detect number of CPUS on host
 export NCPUS=$(grep processor /proc/cpuinfo | wc -l)
 
-## cd to build-direcory for MuppFactory
-function _cd_build() {
-	cd $(dirname $(find . -iname build.bat))
+# cdp - cd-profiles:cd to current DOT-directory - or $HOME if DOT isn't used
+# (Name 'cdd' was used, hence 'cdp')
+# Note: $0 can't be used in bash start-up scripts, hence testing on
+# hard-coded name.
+function _cdp () {
+	if [ -h ~/.bash_profile ]; then
+		local DOT_DIR=$(dirname $(readlink -f ~/.bash_profile))
+	else
+		local DOT_DIR=$HOME
+	fi
+	cd "${DOT_DIR}"
 }
-## NOTE: that aliasing make will crap recursive builds. Therefor use another
-## name just to be sure (even if BW clain not to use recusive builds).
-alias cdb=_cd_build
+alias cdp=_cdp
 
 #Re-init bash (re-read this file)
 function _ibash() {
@@ -133,13 +152,6 @@ function _pdfw() {
 }
 alias pdfw=_pdfw
 
-function _fullbuild() {
-	(cd ../android/; senv; lmake);
-	git st 2>&1 tee /tmp/git_status0.txt;
-	lmake
-}
-alias fullbuild=_fullbuild
-
 #Grep in history. Essential when we have constant merging of histories
 function _gh() {
 	history | \
@@ -151,11 +163,11 @@ function _gh() {
 }
 alias gh=_gh
 
-### Directory profiles handling
-### Inspired by the following zshell solution
-### As bash can't handle named indexes (associative arrays) very well, we
-### have to use normal numbered instead, and search,
-
+###########################################################################
+# Directory profiles handling. Inspired by the following zshell solution As
+# bash can't handle named indexes (i.e. associative arrays) very well, we
+# have to use normal numbered instead, and search,
+###########################################################################
 declare -a CHPWD_ARR
 
 # Returns true if ARRAY given in $1 contains $2
@@ -173,7 +185,7 @@ function _acontains() {
 	return 1
 }
 
-# Source .env-file in current directory, 
+# Source .env-file in current directory,
 # * If it exists
 # * if it hasn't been sourced already
 function chpwd_profiles() {
@@ -210,20 +222,15 @@ function _cd_command() {
 	pwd > ~/.bash_lastdir
 }
 alias cd=_cd_command
+###########################################################################
+# End - Directory profiles.
+###########################################################################
 
-_bash_prompt_command() {
-	_bash_exitstatus
-	_bash_history_sync
-	#echo ${0} ${1} ${2}
-	#echo ${BASH_ARGC[0]}
-### chpwd_profiles
-}
-
-# Open in vim arg #1 in path
+# Open in vim arg #1 in path (vim-which)
 function _vwhich() {
 	vim $(which $1)
 }
-alias vwhich=_vwhich
+alias vw=_vwhich
 
 #simple aliases
 alias ls='ls --color=auto'
@@ -232,20 +239,10 @@ alias ec=concalc
 alias senv='source $(pwd)/.env'
 alias groot='cd $(git root)'
 
-# Start instant-markdown in screen (hack) as start from within Vim under
-# Cygwin for some reason does not work
-alias im='screen -dmS instant-markdown-d instant-markdown-d'
-
 # https://stackoverflow.com/questions/9625316/what-color-options-exist-for-ack-grep-for-colorization-of-output-logs-etc
 export MY_ACK_COLORS="--color-filename=blue --color-lineno=red --color-match=on_bright_yellow"
 alias sgrep='ack ${MY_ACK_COLORS} --cc --cpp --make --ld'
 alias ack='ack ${MY_ACK_COLORS}'
-
-# ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~ ~ ~.~ ~.~ ~.~ ~.~ ~.~ ~.~
-
-export FLASHIT_DIRS="${HOME}/sandbox/Polaris/proprietary/out_bin,${HOME}/sandbox/Polaris/android/out/target/product/polaris"
-export USE_CCACHE=1
-##export OUT_DIR_COMMON_BASE=/tmp/out
 
 #=========================================================================
 # Host-OS specific aliases
@@ -267,50 +264,58 @@ elif	[ "X$(uname -a | grep -i Linux)" != "X" ]; then
 	if [ "X$(which lsb_release)" != "X" ] && \
 		[ "X$(lsb_release -a 2>/dev/null | grep -i Ubuntu)" != "X" ]
 	then
-
+		#OS File-manager (mime)
 		#Have this run somewhere and send the windows somewhere in the back
 		#screen -dmS xdg-open__home -- xdg-open ~
-		alias fm='xdg-open .'
+		alias fm='screen -dmS xdg.open xdg-open .'
 
 	fi
 fi
 
-
 #=========================================================================
 # Special tweaks
 #=========================================================================
-# Winowse workarounds
-# --------------------
-
 if	[ "X$(uname -a | grep -i CYGWIN)" != "X" ]; then
-
-	# GIT_SSH is set in Windowze overall environment registry but putty agent
+	# Windowse workarounds
+	# --------------------
+	#
+	# GIT_SSH is set in Windowse overall environment registry but putty agent
 	# doesn't work well with bash. For (each new interactive) shell use, disable
 	# it and fall back to UNIX-way of key exchanging (~/.ssh/*)
 	# Workaround for variant of bug (2017-03-11)
 	# https://bugs.launchpad.net/ubuntu/+source/gnome-keyring/+bug/1586835
 	# Where ssh-agent has not been started or has died but the environment
 	# variable SSH_AUTH_SOCK is still set
+
+	# Below workaround has been moved to /etc/bash.bashrc
 	#if [ "X$(ps -Al -u $USER | grep ssh-agent)" == "X" ]; then
 	#	unset SSH_AUTH_SOCK
 	#fi
+	#
 	# More hints:
 	# http://unix.stackexchange.com/questions/132065/how-do-i-get-ssh-agent-to-work-in-all-terminals
 
-	# This workaround has been moved to /etc/bash.bashrc
 
 	# GIT_SSH is set in Windowze overall environment registry but putty agent
 	# doesn't work well with bash. For (each new interactive) shell use, disable
 	# it and fall back to UNIX-way of key exchanging (~/.ssh/*)
-
+	#
 	unset GIT_SSH
 
-	# Screens underlaying terminal detection does not work under Cygwin. Work
-	# around it (WORKAROUND)
+	# Screens underlying terminal detection does not work under Cygwin because
+	# Cygwin terminal adds a suffix to the string 'screen'. Albeit this is
+	# standard it's very old and not all programs recognize it. Work
+	# around (WORKAROUND)
 	if [ "X$(grep screen <<< ${TERM})" != "X" ]; then
 		alias vim='vim -T screen'
 	fi
+	# Alternative solution would be to re-set $TERM to 'screen' for the same
+	# condition but knowing this variable is changed by many (ssh, screen
+	# e.t.c.), it's best left alone and not depend on it.
 
+	# HACK: Provide ability to start instant-markdown in screen explicitly as
+	# start from within Vim under Cygwin for some reason does not work
+	alias im='screen -dmS instant-markdown-d instant-markdown-d'
 fi
 
 
