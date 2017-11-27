@@ -28,6 +28,11 @@
 # VT
 "\e[1~": beginning-of-line
 "\e[4~": end-of-line
+# C-Right
+"\e[1;5C": forward-word
+# C-Left
+"\e[1;5D": backward-word
+
 
 # kvt
 "\e[H": beginning-of-line
