@@ -40,6 +40,10 @@
 	tool = kdiff3
 [diff]
 	tool = meld
+[difftool]
+    prompt = false
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
 
 
 [filter "lfs"]
