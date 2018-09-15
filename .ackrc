@@ -1,1 +1,9 @@
 --type-set=ld:ext:ld
+--type-add=make:ext:bp
+--type-add=make:ext:ninja
+--type-add=make:is:CMakeLists.txt
+--type-add=rc:ext:rc
+--type-add=prop:ext:prop
+--type-add=gitignore:is:.gitignore
+--ignore-directory=is:.repo
+--ignore-directory=is:out

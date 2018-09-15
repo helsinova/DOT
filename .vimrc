@@ -160,8 +160,12 @@ fun! <SID>mymake()
 		:Retag
 	endif
 
-	!_bw_make -j4 mon
-	copen
+	make -j4
+	"Always show with copen
+	"copen
+
+	"Show only on error with cwindow
+	cwindow
 endfunction
 
 command! MymakeInstall call <SID>mymakeInstall()
