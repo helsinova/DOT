@@ -1,3 +1,1 @@
 --type-set=ld:ext:ld
---type-add=ld:ext:lsl
---type-add=cc:ext:sfr
