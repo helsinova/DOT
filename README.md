@@ -87,7 +87,7 @@ Now youre ready to clone the project. Below you will clone with submodules but
 from *root-branch* which doesn't have any submodules of actual dot-configs yet,
 but it has the wiki which is another submodule.
 
-* `git clone --recursive ssh://dot_siterepo//DOT.git`
+* `git clone --recursive ssh://dot_siterepo/DOT.git`
 
 ### Installing (using scripts)
 
