@@ -1,6 +1,8 @@
 [user]
-	name = Your Name
-	email = user@domain
+	name = Michael Ambrus
+	email = michael@helsinova.se
+
+#	email = michael.ambrus@gmail.com
 
 [core]
 	editor = "if [ "X$(grep screen <<< ${TERM})" != "X" ]; \
@@ -40,14 +42,84 @@
 	tool = kdiff3
 [diff]
 	tool = meld
-[difftool]
-    prompt = false
-[difftool "meld"]
-    cmd = meld "$LOCAL" "$REMOTE"
 
 
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
+##[url "ssh://dot_siterepo"]
+#[url "ssh://git@github.com/helsinova/"]
+#    insteadOf = ssh://siterepo/
+
+[url "ssh://mambrus@kato2:/home/gits/helsinova/"]
+    insteadOf = ssh://siterepo/
+
+
+
+##[url "ssh://mambrus@kato2:/home/gits/dot/"]
+##    insteadOf = ssh://dot_siterepo/
+
+[url "ssh://git@github.com/helsinova/"]
+    insteadOf = ssh://dot_siterepo/
+
+#- #-----------------------------------------------------------------
+#- # Point **-->> helsinova <<--** github references to inner server (all
+#- # variants)
+#- #-----------------------------------------------------------------
+#[url "ssh://mambrus@kato2:/home/gits/helsinova/"]
+#    insteadOf = https://github.com/helsinova/
+#    insteadOf = ssh://git@github.com/helsinova/
+#    insteadOf = git@github.com:helsinova/
+
+[url "git@github.com:helsinova/"]
+    insteadOf = https://github.com/helsinova/
+
+#- #-----------------------------------------------------------------
+#- # Point **-->> mambrus <<--** github references to inner server (all
+#- # variants). Note that not all kato2 mambrus/ is yet moved and organized.
+#- #-----------------------------------------------------------------
+#[url "ssh://mambrus@kato2:/home/gits/mambrus/"]
+#    insteadOf = https://github.com/mambrus/
+#    insteadOf = ssh://git@github.com/mambrus/
+#    insteadOf = git@github.com:mambrus/
+
+[url "git@github.com:mambrus/"]
+    insteadOf = https://github.com/mambrus/
+
+[url "ssh://mambrus@kato2/"]
+    insteadOf = ssh://hornet.mooo.com:1793/
+
+###############################
+## Site repositories remapping
+###############################
+#
+###############################
+## At home (hornet) /
+## Outside FW working with backup repos
+###############################
+##[url "ssh://mambrus@hornet.mooo.com:/home/repos/"]
+##    insteadOf = ssh://sigmarepo/
+##
+##[url "ssh://mambrus@hornet.mooo.com:/home/repos/"]
+##    insteadOf = ssh://siterepo/
+#
+###############################
+## At home (kato2) /
+## Inside FW
+###############################
+#[url "ssh://mambrus@kato2:/home/gits/"]
+#    insteadOf = ssh://sigmarepo/
+#
+#[url "ssh://mambrus@kato2:/home/gits/"]
+#    insteadOf = ssh://siterepo/
+#
+###############################
+## At home (kato.ambrus.se) /
+## Outside FW working with backup repos
+###############################
+##[url "ssh://mambrus@kato.ambrus.se:/home/gits/"]
+##    insteadOf = ssh://sigmarepo/
+#
+##[url "ssh://mambrus@kato.ambrus.se:/home/gits/"]
+##    insteadOf = ssh://siterepo/
+
+
+[url "ssh://michael.ambrus@review.terranet.ab:29418"]
+	insteadOf = ssh://review.terranet.ab:29418
